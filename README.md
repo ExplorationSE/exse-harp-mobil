@@ -1,9 +1,33 @@
-# ExSE Harp Mobile 1.0.0
+# ExSE Harp Mobile
 
-Version: einzige Quelle `harp/__init__.py` (`__version__`), abrufbar über `/api/health`. Änderungen: `CHANGELOG.md`.
+[![Tests](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml/badge.svg)](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml)
+[![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-blue.svg)](LICENSE)
 
-Live-Anzeige **histogrammierter** TCSPC-Daten einer PicoQuant **HydraHarp 500 S** im Browser des Smartphones,
-inklusive Steuerbefehlen. In V1 kommen die Daten **nicht vom echten Gerät**, sondern aus einer
+Live-Histogramme, Korrelationen und Zählraten einer PicoQuant **HydraHarp 500** auf dem Smartphone – mit
+Steuerung im Browser (PWA).
+
+**Download:** [aktuelle Version (Programm, Demodaten, Anleitung als PDF)](https://github.com/ExplorationSE/exse-harp-mobile/releases/latest)
+· Änderungen: [`CHANGELOG.md`](CHANGELOG.md) · Lizenz: [MIT](#13-lizenz)
+
+<p>
+  <img src="docs/screenshot-v100-header.png" alt="Kopfzeile mit Ansichtsumschalter und Kanaltasten" width="360">
+  <img src="docs/screenshot-v100-info.png" alt="Infobereich mit Versionsanzeige" width="360">
+</p>
+
+## Funktionen
+
+- **Drei Ansichten:** Histogramm (Zeit nach Sync bzw. nach Referenzkanal), Korrelation g² (τ = t(Kn) − t(Kref),
+  T2 und T3) und Zählraten-Zeitverlauf; logarithmische y-Achse, Kanäle einzeln ein-/ausblendbar.
+- **T2 und T3**, Sync bei T2 als eigener Datenkanal **K0** (z. B. Herald-Detektor), Referenzkanal wählbar.
+- **Steuerung vom Handy:** Start/Stopp/Reset, Binbreite, Länge, Tempo, Akkumulieren oder gleitendes Fenster;
+  ein Client steuert, weitere sehen live mit.
+- **Windows-Betrieb** mit Skripten; Zugriff im LAN oder über das Internet (Cloudflare Quick Tunnel, Zugangscode, QR-Code).
+- **Simulation** durch Wiedergabe von `.ptu`-Dateien in Echtzeit; drei Demodateien im Release.
+- Server: Python/FastAPI/WebSocket, Oberfläche: uPlot, getestet mit pytest.
+
+Version: einzige Quelle `harp/__init__.py` (`__version__`), abrufbar über `/api/health`.
+
+In Version 1.0 kommen die Daten **nicht vom echten Gerät**, sondern aus einer
 **Messsimulation mit einer `.ptu`-Datei**, die in Echtzeit abgespielt wird.
 
 > Status: funktionsfähiger Prototyp. Die reine Python-Quelle ist vollständig getestet. Die snAPI-Quelle
@@ -119,6 +143,19 @@ python run_server.py --source snapi  REM snAPI-Quelle statt reinem Python
 Am Messrechner selbst: <http://localhost:8765/>.
 Beim Start wird `default_file` geöffnet und (bei `autostart = true`) sofort abgespielt.
 
+## 4. Öffnen auf dem Smartphone im LAN
+
+1. Handy und Messrechner müssen im **selben (vertrauenswürdigen) Netz** sein.
+2. IP-Adresse des Messrechners ermitteln: `ipconfig` → „IPv4-Adresse“, z. B. `192.168.1.50`.
+3. Windows-Firewall für den Port öffnen (Eingabeaufforderung **als Administrator**, nur Profil „Privat“):
+   ```bat
+   netsh advfirewall firewall add rule name="Harp Mobile" dir=in action=allow protocol=TCP localport=8765 profile=private
+   ```
+4. Am Handy im Browser öffnen: `http://192.168.1.50:8765/` (mit Token: `http://192.168.1.50:8765/?token=IHR_TOKEN`).
+5. Optional „Zum Startbildschirm hinzufügen“. Hinweis: Der Service Worker (Offline-App-Hülle) wird von
+   Browsern nur über **HTTPS** oder `localhost` aktiviert; über `http://<IP>` funktioniert die Seite
+   vollständig, aber ohne Offline-Cache.
+
 ## 4a. Zugriff über das Internet (Cloudflare Quick Tunnel)
 
 `start_online.bat` (ruft `start_online.ps1` auf) erledigt:
@@ -153,19 +190,6 @@ Technische Details:
   beim Beenden gelöscht.
 * Falls QUIC/UDP im Netz gesperrt ist: vor dem Start `set HARP_TUNNEL_PROTOCOL=http2`.
 
-## 4. Öffnen auf dem Smartphone im LAN
-
-1. Handy und Messrechner müssen im **selben (vertrauenswürdigen) Netz** sein.
-2. IP-Adresse des Messrechners ermitteln: `ipconfig` → „IPv4-Adresse“, z. B. `192.168.1.50`.
-3. Windows-Firewall für den Port öffnen (Eingabeaufforderung **als Administrator**, nur Profil „Privat“):
-   ```bat
-   netsh advfirewall firewall add rule name="Harp Mobile" dir=in action=allow protocol=TCP localport=8765 profile=private
-   ```
-4. Am Handy im Browser öffnen: `http://192.168.1.50:8765/` (mit Token: `http://192.168.1.50:8765/?token=IHR_TOKEN`).
-5. Optional „Zum Startbildschirm hinzufügen“. Hinweis: Der Service Worker (Offline-App-Hülle) wird von
-   Browsern nur über **HTTPS** oder `localhost` aktiviert; über `http://<IP>` funktioniert die Seite
-   vollständig, aber ohne Offline-Cache.
-
 ## 5. Bedienung und Bezug zum echten Gerät
 
 Jede Änderung in der Oberfläche wird als Befehl an den Server geschickt und dort **validiert**. Es darf immer
@@ -173,7 +197,7 @@ nur **ein Client steuern** (Knopf „Steuerung übernehmen“; die erste Änderu
 sofern frei). Die Sperre wird beim Trennen oder nach `lock_timeout_s` Inaktivität frei. Alle anderen Clients
 sehen die Daten nur an. Jeder Befehl wird in `logs/commands.jsonl` protokolliert.
 
-| Bedienelement | Bereich (Server-Prüfung) | Simulation (V1) | Spätere Abbildung am HH500 (snAPI) [ungeprüft] |
+| Bedienelement | Bereich (Server-Prüfung) | Simulation (1.0) | Spätere Abbildung am HH500 (snAPI) [ungeprüft] |
 |---|---|---|---|
 | Start / Stopp | – | Wiedergabe starten / pausieren | `histogram.measure()` / `stopMeasure()` |
 | Reset | – | Akkumulation + Verlauf löschen | `histogram.clearMeasure()` |
@@ -269,7 +293,7 @@ Header-Rate. T3: unverändert (Kachel „Sync“, Histogramm = Mikrozeit nach Sy
   und lässt snAPI histogrammieren (`snAPI.getFileDevice()`, `histogram.setSequenceMode(Timer, …)`,
   `histogram.measure()`, `histogram.getData()`). snAPI läuft dabei in einem **eigenen Worker-Prozess**
   (siehe Einschränkungen). Ein Frame wird aus Basisfenstern von `snapi_base_window_s` (50 ms) summiert.
-* **Echtes Gerät** (`kind = "hh500"`): in V1 nur Platzhalter (`harp/sources/hh500_live.py`), der die geplante
+* **Echtes Gerät** (`kind = "hh500"`): in 1.0 nur Platzhalter (`harp/sources/hh500_live.py`), der die geplante
   Abbildung der Befehle auf snAPI-Funktionen dokumentiert. Für V2 sind nötig: Implementierung mit
   `getDevice()`/`initDevice(MeasMode.Histogram oder T3)`/`loadIniConfig()`, Zählraten über
   `device.getCountRates()`, Trigger-/Offset-/Sync-Teiler-Befehle mit Wertebereichen aus `hh500defin.h`,
@@ -309,7 +333,7 @@ Steuer-Sperre, WebSocket-Ablauf, Anmeldung (Login-Seite, `?token=`, Cookie, Fehl
 Tunnel-Situation (Host/Origin `abc.trycloudflare.com`, `X-Forwarded-Proto`, `CF-Connecting-IP`, fremde Origin); mit installiertem snAPI zusätzlich den Vergleich
 snAPI-Histogramm ↔ eigenes Histogramm.
 
-## 10. Bekannte Einschränkungen (V1)
+## 10. Bekannte Einschränkungen (1.0)
 
 * Kein echtes Gerät; die HH500-Live-Quelle ist ein Platzhalter.
 * snAPI-Quelle unter Windows ungetestet. Unter Linux (snAPI 1.2.5) beobachtet: Öffnen einer weiteren Datei im
@@ -353,3 +377,9 @@ snAPI-Histogramm ↔ eigenes Histogramm.
   <https://downloads.picoquant.com/software/HydraHarp500/Hydraharp_500_Release_v1.0.0.0.zip>
 * uPlot 1.6.32 (MIT-Lizenz, `web/vendor/LICENSE-uPlot.txt`): <https://github.com/leeoniya/uPlot>
 * Unabhängige Reader für die Gegenprobe: `ptufile` (<https://pypi.org/project/ptufile/>), `phconvert`
+
+## 13. Lizenz
+
+MIT-Lizenz, siehe [`LICENSE`](LICENSE) – Copyright (c) 2026 ExplorationSE.
+Enthaltene Fremdsoftware: uPlot (MIT, © Leon Sorokin), Lizenztext in `web/vendor/LICENSE-uPlot.txt`.
+PicoQuant, HydraHarp und snAPI sind Marken bzw. Software der PicoQuant GmbH; dieses Projekt ist davon unabhängig.

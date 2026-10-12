@@ -1,5 +1,5 @@
 @echo off
-rem ExSE Harp Mobile 1.0.0 - Start fuer lokales Netz / diesen PC (ohne Tunnel). Vorher einmalig: install_windows.bat
+rem ExSE Harp Mobile - Start fuer lokales Netz / diesen PC (ohne Tunnel). Vorher einmalig: install_windows.bat
 cd /d "%~dp0"
 if not exist ".venv\Scripts\python.exe" goto no_venv
 ".venv\Scripts\python.exe" run_server.py %*

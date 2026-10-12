@@ -1,4 +1,4 @@
-﻿# ExSE Harp Mobile 1.0.0 - Online-Start ueber einen Cloudflare Quick Tunnel (ohne Konto)
+﻿# ExSE Harp Mobile - Online-Start ueber einen Cloudflare Quick Tunnel (ohne Konto)
 # Start normalerweise per Doppelklick auf start_online.bat.
 # Optionen:  -Port 8765   -NoTunnel (nur lokal)   -NoWait (nicht auf Enter warten)
 # Umgebungsvariablen (optional):

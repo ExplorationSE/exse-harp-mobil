@@ -1,4 +1,4 @@
-# ExSE Harp Mobile 1.0.0 – Anleitung: Betrieb unter Windows mit Zugriff vom Handy über das Internet
+# ExSE Harp Mobile – Anleitung: Betrieb unter Windows mit Zugriff vom Handy über das Internet
 
 Diese Anleitung führt Sie Schritt für Schritt durch Installation, Start und Bedienung der Version 1
 (Simulation aus einer PTU-Datei) auf Ihrem eigenen Windows-PC. Das Handy greift über das Internet
@@ -87,7 +87,7 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
 3. Nach 10–30 Sekunden erscheint ein Kasten etwa so:
    ```
    ==================================================================
-     ExSE Harp Mobile 1.0.0 ist ONLINE (Cloudflare Quick Tunnel)
+     ExSE Harp Mobile ist ONLINE (Cloudflare Quick Tunnel)
    ==================================================================
      Adresse:      https://beispiel-woerter.trycloudflare.com
      Zugangscode:  K7QM4-XPR9H
@@ -174,7 +174,7 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
   vertrauliche Daten später ein VPN (z. B. WireGuard/Tailscale) oder einen benannten Cloudflare-Tunnel mit
   Zugangskontrolle verwenden.
 * **Keine Portfreigabe im Router** einrichten – sie ist nicht nötig.
-* V1 steuert nur eine **Simulation**. Bei Anschluss des echten Geräts (spätere Version) kommen zusätzliche
+* Version 1.0 steuert nur eine **Simulation**. Bei Anschluss des echten Geräts (spätere Version) kommen zusätzliche
   Sicherheitsverriegelungen hinzu (z. B. kein Fernschalten eines Laser-Triggers).
 
 ## 11. Für Fortgeschrittene

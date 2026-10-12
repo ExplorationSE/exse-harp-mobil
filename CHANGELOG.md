@@ -1,5 +1,14 @@
 # Änderungsprotokoll – ExSE Harp Mobile
 
+## 1.0.1 – 13.10.2026
+
+Nur Dokumentation und Projektpflege, keine Funktionsänderung.
+- MIT-Lizenz (`LICENSE`); Hinweis auf uPlot (MIT) bleibt in `web/vendor/LICENSE-uPlot.txt`.
+- GitHub Actions: pytest bei jedem Push (Python 3.11 und 3.13), Test-Badge im README.
+- README: neuer Kopf mit Zweck, Download-Link zur aktuellen Version, Abschnitt „Funktionen“,
+  Screenshots, Kapitel „Lizenz“; Kapitelreihenfolge 4/4a korrigiert; „V1“ → „1.0“.
+- Version 1.0.1, Service-Worker-Cache erneuert.
+
 ## 1.0.0 – 13.10.2026
 
 Erste Version. Live-Anzeige von Messdaten einer PicoQuant HydraHarp 500 im Browser/Handy,

@@ -1,4 +1,4 @@
-# Harp Mobile V1 – Laufzeit (alle Pakete als fertige Windows-Wheels verfügbar, kein Compiler nötig)
+# ExSE Harp Mobile – Laufzeit (alle Pakete als fertige Windows-Wheels verfügbar, kein Compiler nötig)
 fastapi>=0.110,<1
 uvicorn[standard]>=0.29,<1
 numpy>=1.26

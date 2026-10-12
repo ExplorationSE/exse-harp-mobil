@@ -1,4 +1,4 @@
-﻿# ExSE Harp Mobile 1.0.0 - beendet Server und Cloudflare-Tunnel, die mit start_online gestartet wurden.
+﻿# ExSE Harp Mobile - beendet Server und Cloudflare-Tunnel, die mit start_online gestartet wurden.
 param([int]$Port = 8765, [switch]$Quiet)
 $ErrorActionPreference = 'SilentlyContinue'
 $root = $PSScriptRoot

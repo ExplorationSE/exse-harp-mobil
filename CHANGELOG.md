@@ -1,0 +1,37 @@
+# Änderungsprotokoll – ExSE Harp Mobile
+
+## 1.0.0 – 13.10.2026
+
+Erste Version. Live-Anzeige von Messdaten einer PicoQuant HydraHarp 500 im Browser/Handy,
+in dieser Version als Simulation durch Wiedergabe von PTU-Dateien.
+
+### Server
+- FastAPI + WebSocket, Frames mit Histogramm, Korrelation und Zählraten (wenige kB pro Bild).
+- PTU-Leser für T2 und T3 (u. a. Generic T2/T3, HydraHarp V1/V2), Gegenprobe mit `ptufile`.
+- Wiedergabe in Echtzeit oder schneller/langsamer, Akkumulieren oder gleitendes Fenster, Datei wiederholen.
+- Steuerung durch genau einen Client (Übernahme/Freigabe), Zuschauer sehen live mit.
+- Zugangscode mit Cookie, Origin-Prüfung, Befehlsprotokoll.
+- Einzige Versionsquelle `harp/__init__.py`, abrufbar über `/api/health`.
+
+### Messansichten
+- **Histogramm** (log): T3 Mikrozeit nach Sync; T2 Zeit seit dem letzten Ereignis auf dem Referenzkanal.
+- **Korrelation (g²)** (log): τ = t(Kn) − t(Kref) für T2 und T3 (T3 mit absoluter Zeit), alle Paare im
+  symmetrischen Fenster, auch über Frame-Grenzen hinweg; Referenzkanal und Binbreite wählbar.
+- **Zeitverlauf**: Zählraten (kcps) über der Dateizeit.
+- T2: Sync-Eingang als eigener Datenkanal **K0** (wenn die Datei Sync-Ereignisse enthält).
+- Startwerte für Binbreite/Fenster je nach Datei (Sync-Periode bzw. Herald-Koinzidenzen im ns-Bereich).
+
+### Oberfläche (PWA)
+- Handy-optimiert: einzeilige Kopfzeile mit Ansichtsumschalter „Histo | g² | Zeit“ und Kanaltasten K0–K4.
+- Diagramme symmetrisch in der Karte zentriert; Zählratenkacheln in einer Zeile.
+- Fortschrittsbalken direkt unter den Start-Tasten; Versionsanzeige im Infobereich.
+- Jede PTU-Datei erscheint genau einmal in der Auswahl (Windows: keine Doppelten mehr).
+
+### Windows-Betrieb
+- `install_windows.bat`, `start_server.bat` (lokales Netz), `start_online.bat`/`stop_online.bat`
+  (Internetzugriff über Cloudflare Quick Tunnel, mit QR-Code und Zugangscode), Anleitung als PDF.
+
+### Demodaten
+- `Demo_T3_Fluoreszenz_4Kanal_5min.ptu`: 4 Kanäle, Fluoreszenzabklingen, 5 min.
+- `Demo_T2_Einzelphotonen_HBT_90s.ptu`: Einzelphotonenquelle, HBT, Antibunching.
+- `Demo_T2_Heralded_K0_HBT_60s.ptu`: Herald-Einzelphotonen, K0 = Herald, Koinzidenzen bei +12/+15 ns.

@@ -1,0 +1,5 @@
+# Optional
+ptufile>=2024.1      # unabhängige Gegenprobe des PTU-Readers (tools/crosscheck.py)
+phconvert>=0.10      # zweite Gegenprobe
+playwright>=1.44     # Screenshots (zusätzlich: python -m playwright install chromium)
+# snAPI>=1.2.5       # nur für source.kind = "snapi" bzw. später das echte Gerät (siehe README)

@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+logs/*
+!logs/.gitkeep
+data/*.ptu
+data/*.PTU
+tools/cloudflared.exe
+tools/*.download
+screenshot-*-full.png

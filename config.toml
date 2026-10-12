@@ -1,0 +1,38 @@
+# Harp Mobile V1 – Konfiguration
+
+[server]
+# 0.0.0.0 = im ganzen LAN erreichbar (für das Handy nötig); 127.0.0.1 = nur dieser PC
+host = "0.0.0.0"
+port = 8765
+# Optionaler Zugriffstoken. Leer = keine Authentifizierung (nur in vertrauenswürdigem LAN!).
+# Wenn gesetzt, die Seite mit  http://<IP>:8765/?token=<TOKEN>  öffnen.
+token = ""
+# Steuer-Sperre verfällt nach so vielen Sekunden ohne Befehl des steuernden Clients
+lock_timeout_s = 300
+
+[source]
+# pure  = reiner Python-PTU-Replay (läuft überall, Standard für V1)
+# snapi = PTU-Replay über PicoQuant snAPI (unter Linux mit snAPI 1.2.5 getestet, unter Windows ungetestet)
+# hh500 = echte HydraHarp 500 (in V1 nur Platzhalter)
+kind = "pure"
+data_dir = "data"
+default_file = "Demo_T3_Fluoreszenz_4Kanal_5min.ptu"
+autostart = true
+# nur snapi: true, falls getData() im Sequence-Modus kumulierte statt Fenster-Daten liefert
+snapi_windows_cumulative = false
+# nur snapi: Basis-Fenster in s; ein Frame = Summe mehrerer Basisfenster
+snapi_base_window_s = 0.05
+
+[defaults]
+refresh_ms = 150        # Frame-Intervall in ms (≈ 6–7 Frames/s)
+speed = 1.0             # Wiedergabegeschwindigkeit (1 = Echtzeit)
+binning = 3             # Bin = Dateiauflösung × 2^binning
+hist_len_code = 0       # Histogrammlänge = 1024 × 2^code
+channels = [1, 2, 3, 4]
+mode = "accumulate"     # accumulate | sliding
+window_frames = 20      # nur sliding: Anzahl Frames im gleitenden Fenster
+display_points = 1024   # max. Punkte pro Kanal zur Anzeige (Rebinning)
+loop = true
+
+[logging]
+log_dir = "logs"

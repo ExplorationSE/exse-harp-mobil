@@ -1,0 +1,8 @@
+# Harp Mobile V1 – Laufzeit (alle Pakete als fertige Windows-Wheels verfügbar, kein Compiler nötig)
+fastapi>=0.110,<1
+uvicorn[standard]>=0.29,<1
+numpy>=1.26
+qrcode>=7.4
+# Tests (reines Python)
+pytest>=8
+httpx>=0.27

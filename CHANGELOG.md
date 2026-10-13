@@ -1,5 +1,12 @@
 # Änderungsprotokoll – ExSE Harp Mobil
 
+## 1.0.4 – 13.10.2026
+
+Textänderung, keine Funktionsänderung.
+- Infobereich-Hinweis in der App gekürzt: „Simulation mit synthetischen PTU-Dateien – diese Version enthält noch keine
+  Schnittstelle zu einer echten HydraHarp.“ (Herkunftshinweis bleibt im README).
+- Service-Worker-Cache neu (`exse-harp-mobil-1.0.4-r15`).
+
 ## 1.0.3 – 13.10.2026
 
 Umbenennung, keine Funktionsänderung.

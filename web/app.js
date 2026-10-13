@@ -54,17 +54,43 @@ function fmtCompact(r) {
 function fmtBytes(b) { return b > 1e6 ? (b / 1e6).toFixed(2) + " MB" : (b / 1e3).toFixed(1) + " kB"; }
 
 // ------------------------------------------------------------------ WebSocket
+// Verbindungsüberwachung: Ping alle 5 s; kommt 10 s lang nichts (auch kein Frame), gilt die Verbindung
+// als tot und wird neu aufgebaut. Beim Zurückkehren in den Vordergrund sofort prüfen bzw. neu verbinden.
+const PING_MS = 5000, DEAD_MS = 10000;
+const C = { lastRx: 0, everOpen: false, hadControl: false, retryT: 0 };
+function setConnUI(on) {
+  $("conn").className = "dot " + (on ? "on" : "off");
+  $("connbar").hidden = on || !C.everOpen;
+}
+function dropSocket() {
+  const ws = S.ws; S.ws = null;
+  if (ws) { ws.onopen = ws.onclose = ws.onmessage = ws.onerror = null; try { ws.close(); } catch (e) { /* egal */ } }
+}
+function lostConnection() {
+  if (S.mine) C.hadControl = true;
+  S.mine = false;
+  if (S.status) S.status.control = { held: false, mine: false };   // unbekannt, bis der Server wieder meldet
+  updateCtrl(); setConnUI(false);
+}
+function reconnect(delay) {
+  clearTimeout(C.retryT);
+  C.retryT = setTimeout(connect, delay || 0);
+}
 function connect() {
+  clearTimeout(C.retryT);
+  dropSocket();
   const proto = location.protocol === "https:" ? "wss" : "ws";
   const ws = new WebSocket(`${proto}://${location.host}/ws${token ? "?token=" + encodeURIComponent(token) : ""}`);
   S.ws = ws;
-  ws.onopen = () => { $("conn").className = "dot on"; };
+  ws.onopen = () => { C.lastRx = Date.now(); C.everOpen = true; setConnUI(true); };
   ws.onclose = (e) => {
-    $("conn").className = "dot off"; S.mine = false; updateCtrl();
+    if (S.ws !== ws) return;
+    S.ws = null; lostConnection();
     if (e.code === 4401) { location.href = "/login"; return; }   // nicht (mehr) angemeldet
-    setTimeout(connect, 1500);   // automatische Wiederverbindung
+    reconnect(1500);   // automatische Wiederverbindung
   };
   ws.onmessage = (ev) => {
+    C.lastRx = Date.now();
     const m = JSON.parse(ev.data);
     if (m.type === "frame") onFrame(m, ev.data.length);
     else if (m.type === "status") onStatus(m);
@@ -73,8 +99,26 @@ function connect() {
       S.lastT = m.t.length ? m.t[m.t.length - 1] : -1; }
   };
 }
+function watchdog() {
+  const ws = S.ws;
+  if (!ws || ws.readyState !== 1) return;
+  if (Date.now() - C.lastRx > DEAD_MS) { lostConnection(); reconnect(0); return; }   // tote/hängende Verbindung
+  ws.send(JSON.stringify({ type: "ping", t: Date.now() }));
+}
+setInterval(watchdog, PING_MS);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState !== "visible") return;
+  const ws = S.ws;
+  if (!ws || ws.readyState > 1) { lostConnection(); reconnect(0); return; }
+  if (ws.readyState !== 1) return;   // baut gerade auf
+  const t = Date.now();              // Probe: antwortet der Server binnen 3 s? Sonst neu verbinden
+  try { ws.send(JSON.stringify({ type: "ping", t })); } catch (e) { /* tot */ }
+  setTimeout(() => { if (S.ws === ws && C.lastRx < t) { lostConnection(); reconnect(0); } }, 3000);
+});
+window.addEventListener("pageshow", (e) => { if (e.persisted) { lostConnection(); reconnect(0); } });
+window.addEventListener("online", () => { if (!S.ws || S.ws.readyState !== 1) reconnect(0); });
 function send(cmd, params) {
-  if (!S.ws || S.ws.readyState !== 1) { toast("Keine Verbindung", true); return; }
+  if (!S.ws || S.ws.readyState !== 1) { toast("Keine Verbindung – wird wiederhergestellt …", true); reconnect(0); return; }
   S.ws.send(JSON.stringify({ type: "command", cmd, params: params || {}, id: ++S.cmdId }));
 }
 // Steuerbefehl: falls noch keine Steuerung, zuerst übernehmen
@@ -91,17 +135,24 @@ function onAck(m) {
 // ------------------------------------------------------------------ Status / Steuerelemente
 function onStatus(st) {
   S.status = st; S.mine = !!(st.control && st.control.mine);
+  if (C.hadControl) {   // erste Statusmeldung nach Wiederverbindung
+    C.hadControl = false;
+    if (!S.mine) toast(st.control && st.control.held ? "Verbindung war unterbrochen – ein anderes Gerät steuert jetzt"
+      : "Verbindung war unterbrochen – Steuerung wurde abgegeben", true);
+  }
   const rs = $("runstate");
   rs.textContent = st.running ? "läuft" : "gestoppt"; rs.className = "pill " + (st.running ? "run" : "stop");
   updateCtrl(); fillControls(st);
   if (st.error) toast(st.error, !st.error.startsWith("Ende"));
 }
 function updateCtrl() {
-  const st = S.status, b = $("ctrlBtn");
-  b.classList.toggle("mine", S.mine);
-  b.textContent = S.mine ? "Sie steuern" : (st && st.control && st.control.held ? "Steuerung belegt" : "Steuerung übernehmen");
-  $("lockinfo").textContent = S.mine ? "Sie haben die Steuerung" :
-    (st && st.control && st.control.held ? "anderer Client steuert – nur Anzeige" : "Änderung übernimmt die Steuerung automatisch");
+  const st = S.status, b = $("ctrlBtn"), other = !S.mine && !!(st && st.control && st.control.held);
+  b.classList.toggle("mine", S.mine); b.classList.toggle("viewer", other);
+  b.textContent = S.mine ? "Sie steuern" : (other ? "Nur Anzeige" : "Steuerung übernehmen");
+  b.title = other ? "Ein anderes Gerät steuert – dieses Gerät zeigt nur an" : "Steuerung übernehmen/abgeben";
+  const li = $("lockinfo"); li.classList.toggle("viewer", other);
+  li.textContent = S.mine ? "Sie haben die Steuerung" :
+    (other ? "Nur Anzeige – ein anderes Gerät steuert" : "Änderung übernimmt die Steuerung automatisch");
 }
 function fillControls(st) {
   const s = st.settings, info = st.info || {};

@@ -1,5 +1,19 @@
 # Änderungsprotokoll – ExSE Harp Mobil
 
+## 1.0.6 – 13.10.2026
+
+Stabiler Betrieb mit mehreren Handys gleichzeitig.
+- Server: Jede Verbindung hat eine eigene Sende-Warteschlange (Frame und Status nur jeweils der neueste,
+  Quittungen in Reihenfolge). Ein hängendes Handy (Bildschirm aus, Hintergrund, Funkloch) blockiert weder
+  andere Handys noch die Befehlsverarbeitung.
+- Server: Hängt das Senden an ein Handy länger als 5 s, wird dessen Verbindung aktiv geschlossen (vorher blieb
+  sie als „Zombie“ offen: eingefrorene Anzeige ohne Wiederverbindung); eine gehaltene Steuerung wird freigegeben.
+- App: Verbindungsprüfung per Ping alle 5 s; kommt 10 s lang keine Antwort, wird neu verbunden. Beim
+  Zurückkehren in den Vordergrund wird die Verbindung sofort geprüft. Hinweis „Verbindung wird wiederhergestellt …“.
+- App: Zuschauer-Modus deutlich gekennzeichnet („Nur Anzeige“); Hinweis nach Wiederverbindung, wenn die
+  Steuerung bei der Unterbrechung verloren ging.
+- Tests mit zwei gleichzeitigen Clients, einer davon hängend.
+
 ## 1.0.5 – 13.10.2026
 
 - `install_windows.bat`: Python-Suche robuster (py -3.13, -3.12, -3.11, -3, py, python; jeder Kandidat wird

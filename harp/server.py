@@ -7,6 +7,7 @@ import json
 import logging
 import time
 import uuid
+from collections import deque
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -31,13 +32,105 @@ log = logging.getLogger("harp")
 WEB_DIR = BASE_DIR / "web"
 
 
+SEND_TIMEOUT_S = 5.0     # länger hängendes Senden → Verbindung gilt als tot und wird geschlossen
+MAX_QUEUED = 200         # mehr wartende Einzelnachrichten (Quittungen, Pong) → Client hängt
+
+
 class Client:
-    def __init__(self, ws: WebSocket, addr: str) -> None:
+    """Eine WebSocket-Verbindung mit eigener Sende-Warteschlange und eigenem Sende-Task.
+
+    Niemand sonst ruft ws.send_text() auf: Broadcasts legen nur Nachrichten ab und kehren sofort
+    zurück. Ein hängendes Handy blockiert so weder andere Clients noch die Befehlsverarbeitung.
+    Frame und Status werden "latest-only" gehalten (veraltete werden überschrieben), Quittungen,
+    Pong und Verlauf in Reihenfolge. Hängt ein Senden länger als SEND_TIMEOUT_S, wird die
+    Verbindung aktiv geschlossen – das Handy merkt das und verbindet sich neu.
+    """
+
+    def __init__(self, ws: WebSocket, addr: str, on_dead=None, send_timeout: float = SEND_TIMEOUT_S) -> None:
         self.ws = ws
         self.addr = addr
         self.id = uuid.uuid4().hex[:8]
-        self.pending: asyncio.Task | None = None
         self.dropped = 0
+        self.closed = False
+        self.send_timeout = send_timeout
+        self._queue: deque[str] = deque()
+        self._status: str | None = None
+        self._frame: str | None = None
+        self._wake = asyncio.Event()
+        self._on_dead = on_dead
+        self.task: asyncio.Task | None = None
+
+    def start(self) -> None:
+        self.task = asyncio.create_task(self._run())
+
+    def post(self, txt: str) -> None:
+        if self.closed:
+            return
+        if len(self._queue) >= MAX_QUEUED:
+            asyncio.create_task(self.kill("Warteschlange voll"))
+            return
+        self._queue.append(txt)
+        self._wake.set()
+
+    def post_status(self, txt: str) -> None:
+        if not self.closed:
+            self._status = txt
+            self._wake.set()
+
+    def post_frame(self, txt: str) -> None:
+        if self.closed:
+            return
+        if self._frame is not None:
+            self.dropped += 1   # Backpressure: langsamer Client überspringt Frames
+        self._frame = txt
+        self._wake.set()
+
+    def _next(self) -> str | None:
+        if self._queue:
+            return self._queue.popleft()
+        if self._status is not None:
+            t, self._status = self._status, None
+            return t
+        if self._frame is not None:
+            t, self._frame = self._frame, None
+            return t
+        return None
+
+    async def _run(self) -> None:
+        try:
+            while not self.closed:
+                await self._wake.wait()
+                self._wake.clear()
+                while not self.closed and (txt := self._next()) is not None:
+                    try:
+                        await asyncio.wait_for(self.ws.send_text(txt), timeout=self.send_timeout)
+                    except asyncio.TimeoutError:
+                        await self.kill(f"Senden hing länger als {self.send_timeout:g} s")
+                        return
+                    except Exception as e:
+                        await self.kill(f"Sendefehler: {type(e).__name__}")
+                        return
+        except asyncio.CancelledError:
+            pass
+
+    async def kill(self, reason: str) -> None:
+        """Verbindung schließen (hängende Gegenstelle) und beim Dienst abmelden."""
+        if self.closed:
+            return
+        self.closed = True
+        log.warning("Client %s (%s) wird getrennt: %s", self.id, self.addr, reason)
+        try:
+            await asyncio.wait_for(self.ws.close(code=1011), timeout=1.0)
+        except Exception:
+            pass
+        if self._on_dead:
+            self._on_dead(self)
+
+    def stop(self) -> None:
+        self.closed = True
+        self._wake.set()
+        if self.task and not self.task.done() and self.task is not asyncio.current_task():
+            self.task.cancel()
 
 
 class HarpService:
@@ -239,17 +332,15 @@ class HarpService:
             return
         txt = self.build_frame(total, fr, rates, sync_rate, calc_ms)
         for c in list(self.clients.values()):
-            if c.pending and not c.pending.done():
-                c.dropped += 1  # Backpressure: langsamer Client überspringt Frames
-                continue
-            c.pending = asyncio.create_task(self._send(c, txt))
+            c.post_frame(txt)   # kehrt sofort zurück; Senden im Task des Clients
 
-    async def _send(self, c: Client, txt: str) -> None:
-        try:
-            await asyncio.wait_for(c.ws.send_text(txt), timeout=5.0)
-        except Exception:
-            self.clients.pop(c.id, None)
+    def remove_client(self, c: Client) -> None:
+        """Client abmelden (getrennt oder wegen Hängens geschlossen); gibt ggf. die Steuerung frei."""
+        c.stop()
+        if self.clients.pop(c.id, None) is not None:
             self.lock.release(c.id)
+            log.info("Client %s getrennt", c.id)
+            self.post_status_all()
 
     def status(self, c: Client | None = None) -> dict:
         return {
@@ -264,12 +355,12 @@ class HarpService:
             "auth": bool(self.cfg.token),
         }
 
-    async def broadcast_status(self) -> None:
+    def post_status_all(self) -> None:
         for c in list(self.clients.values()):
-            try:
-                await c.ws.send_text(json.dumps(self.status(c)))
-            except Exception:
-                self.clients.pop(c.id, None)
+            c.post_status(json.dumps(self.status(c)))
+
+    async def broadcast_status(self) -> None:
+        self.post_status_all()   # nicht blockierend: jeder Client sendet in seinem eigenen Task
 
     # ------------------------------------------------------------ Befehle
     async def handle_command(self, c: Client, msg: dict) -> dict:
@@ -474,34 +565,32 @@ def create_app(cfg: Config | None = None) -> FastAPI:
                 return
         await ws.accept()
         addr = f"{ws.client.host}:{ws.client.port}" if ws.client else "?"
-        c = Client(ws, addr)
+        c = Client(ws, addr, on_dead=svc.remove_client)
         svc.clients[c.id] = c
+        c.start()
         log.info("Client %s verbunden (%s)", c.id, addr)
         try:
-            await ws.send_text(json.dumps(svc.status(c)))
+            c.post(json.dumps(svc.status(c)))
             if svc.rates.t:  # bisherigen Zählraten-Verlauf nachliefern
-                await ws.send_text(json.dumps({"type": "trace", "t": list(svc.rates.t),
-                                               "rates": [[round(x, 1) for x in r] for r in svc.rates.rates]}))
-            while True:
+                c.post(json.dumps({"type": "trace", "t": list(svc.rates.t),
+                                   "rates": [[round(x, 1) for x in r] for r in svc.rates.rates]}))
+            while not c.closed:
                 raw = await ws.receive_text()
                 try:
                     msg = json.loads(raw)
                 except json.JSONDecodeError:
-                    await ws.send_text(json.dumps({"type": "ack", "ok": False, "error": "kein JSON"}))
+                    c.post(json.dumps({"type": "ack", "ok": False, "error": "kein JSON"}))
                     continue
                 if msg.get("type") == "command":
                     ack = await svc.handle_command(c, msg)
-                    await ws.send_text(json.dumps(ack))
-                    await svc.broadcast_status()
+                    c.post(json.dumps(ack))
+                    svc.post_status_all()
                 elif msg.get("type") == "ping":
-                    await ws.send_text(json.dumps({"type": "pong", "t": msg.get("t")}))
-        except WebSocketDisconnect:
+                    c.post(json.dumps({"type": "pong", "t": msg.get("t")}))
+        except (WebSocketDisconnect, RuntimeError):
             pass
         finally:
-            svc.clients.pop(c.id, None)
-            svc.lock.release(c.id)
-            log.info("Client %s getrennt", c.id)
-            await svc.broadcast_status()
+            svc.remove_client(c)
 
     app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
     return app

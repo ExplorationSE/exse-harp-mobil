@@ -9,6 +9,10 @@ Hinweise zu Status und Herkunft, keine Funktionsänderung.
   keine Gewährleistung, nicht für sicherheitskritische Anwendungen.
 - App: kurzer Hinweis und Kennzeichen „Simulation“ im Infobereich; Manifest-Beschreibung angepasst.
 - Repository-Beschreibung: „Simulation, noch ohne Geräteanbindung“.
+- Demodateien umbenannt, damit sie klar als synthetisch erkennbar sind (Inhalt unverändert):
+  `Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu`, `Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu`,
+  `Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu`; Standarddatei in `config.toml` angepasst.
+  Die alten Dateien `data\Demo_T3_…`, `data\Demo_T2_…` können gelöscht werden.
 
 ## 1.0.1 – 13.10.2026
 

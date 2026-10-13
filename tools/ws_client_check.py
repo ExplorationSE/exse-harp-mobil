@@ -92,7 +92,7 @@ async def main() -> int:
         await asyncio.sleep(0.3)
         fr = await collect(ws, 1.0)
         check("Stopp", a["ok"] and len(fr) == 0, f"{len(fr)} Frames nach Stopp")
-        a = await cmd(ws, "open_file", {"name": "Demo_T2_Einzelphotonen_HBT_90s.ptu"})
+        a = await cmd(ws, "open_file", {"name": "Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu"})
         a2 = await cmd(ws, "start")
         fr = await collect(ws, 1.5)
         m = fr[-1][0] if fr else {}
@@ -100,7 +100,7 @@ async def main() -> int:
               f"Ansicht {m.get('hist_kind')}, Kanäle {m.get('channels')}, Korr. Ref K{m.get('corr_ref')} → {m.get('corr_channels')}, {m.get('corr_bin_ps')} ps/Bin, "
               f"Sync {m.get('sync_rate')}")
         # Zurück auf Standard
-        await cmd(ws, "open_file", {"name": "Demo_T3_Fluoreszenz_4Kanal_5min.ptu"})
+        await cmd(ws, "open_file", {"name": "Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu"})
         await cmd(ws, "set", {"binning": 3, "channels": [1, 2, 3, 4], "display_points": 1024, "hist_len_code": 0,
                               "refresh_ms": 150, "mode": "accumulate", "speed": 1,
                               "window_frames": 20})

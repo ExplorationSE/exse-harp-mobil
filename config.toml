@@ -16,7 +16,7 @@ lock_timeout_s = 300
 # hh500 = echte HydraHarp 500 (in V1 nur Platzhalter)
 kind = "pure"
 data_dir = "data"
-default_file = "Demo_T3_Fluoreszenz_4Kanal_5min.ptu"
+default_file = "Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu"
 autostart = true
 # nur snapi: true, falls getData() im Sequence-Modus kumulierte statt Fenster-Daten liefert
 snapi_windows_cumulative = false

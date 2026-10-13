@@ -14,7 +14,7 @@ class Config:
     port: int = 8765
     source: str = "pure"                 # pure | snapi | hh500
     data_dir: Path = BASE_DIR / "data"
-    default_file: str = "Demo_T3_Fluoreszenz_4Kanal_5min.ptu"
+    default_file: str = "Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu"
     token: str = ""                      # leer = keine Authentifizierung (nur LAN!)
     log_dir: Path = BASE_DIR / "logs"
     lock_timeout_s: float = 300.0

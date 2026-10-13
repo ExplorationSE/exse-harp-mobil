@@ -1,6 +1,6 @@
 """Gegenprobe des eigenen PTU-Readers mit unabhängigen Readern (ptufile, phconvert), falls installiert.
 
-Aufruf: python tools/crosscheck.py data/Demo_T3_Fluoreszenz_4Kanal_5min.ptu
+Aufruf: python tools/crosscheck.py data/Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu
 """
 from __future__ import annotations
 
@@ -61,4 +61,4 @@ def main(path: str) -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "data/Demo_T3_Fluoreszenz_4Kanal_5min.ptu"))
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else "data/Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu"))

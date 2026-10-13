@@ -10,10 +10,10 @@ from playwright.sync_api import sync_playwright
 
 URL = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:8765/"
 OUT = Path(__file__).resolve().parent.parent
-T3 = "Demo_T3_Fluoreszenz_4Kanal_5min.ptu"
-T2 = "Demo_T2_Einzelphotonen_HBT_90s.ptu"
+T3 = "Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu"
+T2 = "Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu"
 P = {"width": 390, "height": 844}
-HER = "Demo_T2_Heralded_K0_HBT_60s.ptu"
+HER = "Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu"
 VIEWS = [("heralded-korrelation-ref-k0", P, HER, "corr"), ("heralded-histo", P, HER, "hist"),
          ("heralded-360-header", {"width": 360, "height": 780}, HER, "corr"),
          ("t3-360-header", {"width": 360, "height": 780}, T3, "hist")]

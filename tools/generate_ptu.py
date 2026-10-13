@@ -10,8 +10,8 @@ Laserperiode, unterdrückter Mittelpeak (Antibunching, g²(0) < 0,5) und Bunchin
 durch Blinken der Quelle (µs-Zeitskala), plus Dunkelzählungen.
 
 Demo-Dateien erzeugen:
-  python tools/generate_ptu.py --out data/Demo_T3_Fluoreszenz_4Kanal_5min.ptu --duration 300 --rates 5000,7500,10000,3500
-  python tools/generate_ptu.py --hbt --out data/Demo_T2_Einzelphotonen_HBT_90s.ptu --duration 90
+  python tools/generate_ptu.py --out data/Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu --duration 300 --rates 5000,7500,10000,3500
+  python tools/generate_ptu.py --hbt --out data/Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu --duration 90
 """
 from __future__ import annotations
 
@@ -185,7 +185,7 @@ def gen_heralded(duration_s: float, pair_rate: float, eta_idler: float, eta_sign
 
 def main(argv: list[str] | None = None) -> Path:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--out", default="data/Demo_T3_Fluoreszenz_4Kanal_5min.ptu")
+    ap.add_argument("--out", default="data/Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu")
     ap.add_argument("--duration", type=float, default=20.0, help="Messdauer in s")
     ap.add_argument("--sync", type=float, default=40e6, help="Sync-Rate in Hz")
     ap.add_argument("--res", type=float, default=4.0, help="T3-Auflösung in ps (1 ps × 2^n)")

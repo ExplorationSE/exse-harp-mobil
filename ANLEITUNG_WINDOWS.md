@@ -28,7 +28,7 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
   erreichbar, ausschließlich über den Tunnel.
 * Wer die Adresse kennt, sieht zunächst nur eine **Anmeldeseite**. Ohne den **Zugangscode** gibt es weder Daten
   noch Steuerung.
-* Datenquelle ist die mitgelieferte synthetische Messung `data\Demo_T3_Fluoreszenz_4Kanal_5min.ptu` (HydraHarp-500-T3-Format,
+* Datenquelle ist die mitgelieferte synthetische Messung `data\Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu` (HydraHarp-500-T3-Format,
   4 Kanäle, 40 MHz Sync, 5 Minuten, läuft in Schleife). Es wird **kein Messgerät** und **kein snAPI** benötigt.
 
 ## 1. Voraussetzungen
@@ -125,11 +125,11 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
   * **Frame-Intervall** (Aktualisierungsrate), **Wiedergabe-Tempo** („Echtzeit“, 0,1× bis 100×),
   * **Binbreite** und **Histogrammlänge**,
   * **Modus** Akkumulieren oder gleitendes Fenster (**Fenster (Frames)**), **Anzeige-Punkte**, **Datei wiederholen**,
-  * **PTU-Datei**: `Demo_T2_Einzelphotonen_HBT_90s.ptu` – Einzelphotonenquelle im Hanbury-Brown-Twiss-Aufbau
+  * **PTU-Datei**: `Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu` – Einzelphotonenquelle im Hanbury-Brown-Twiss-Aufbau
     (T2). In der Ansicht **Korrelation** (Handy: „g²“) sieht man K2 gegen K1: Peaks alle 100 ns, der **Mittelpeak
     bei 0 fehlt fast** (Antibunching). Die Ansicht **Histogramm** zeigt bei T2-Dateien die Zeit seit
     dem letzten Ereignis auf dem Referenzkanal („t nach K1“).
-  * **PTU-Datei**: `Demo_T2_Heralded_K0_HBT_60s.ptu` – Herald-Einzelphotonen: K0 (violett) = Herald-Detektor
+  * **PTU-Datei**: `Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu` – Herald-Einzelphotonen: K0 (violett) = Herald-Detektor
     am Sync-Eingang, K1/K2 = HBT. Referenzkanal ist automatisch K0; in **g²** erscheinen scharfe Peaks bei
     +12 ns (K1) und +15 ns (K2). Bei T2-Dateien mit Sync-Ereignissen wird der Sync als eigener Kanal K0 gezeigt.
   * **Referenzkanal (g²)**: Bezugskanal der Korrelation (τ = t(Kn) − t(Kref)) und bei T2 Start des Histogramms; er hat keine eigene Kurve.

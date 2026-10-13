@@ -92,7 +92,7 @@ In Version 1.0 kommen die Daten **nicht vom echten Gerät**, sondern aus einer
 | `harp/server.py` | FastAPI-App, WebSocket, Messschleife |
 | `harp/auth.py` | Zugangscode, Anmeldeseite, Sitzungs-Cookie, Fehlversuch-Sperre, Origin-Prüfung |
 | `web/` | Web-App (HTML/CSS/JS, `vendor/uPlot` lokal, Manifest, Service Worker) |
-| `data/` | PTU-Dateien (Demo: `Demo_T3_Fluoreszenz_4Kanal_5min.ptu`, `Demo_T2_Einzelphotonen_HBT_90s.ptu`, `Demo_T2_Heralded_K0_HBT_60s.ptu`) |
+| `data/` | PTU-Dateien (Demo: `Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu`, `Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu`, `Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu`) |
 | `tools/generate_ptu.py` | Generator für synthetische PTU-Dateien |
 | `tools/crosscheck.py` | Gegenprobe des Readers mit `ptufile` und `phconvert` |
 | `tools/ws_client_check.py` | End-to-End-Test gegen den laufenden Server |
@@ -259,18 +259,18 @@ sehen die Daten nur an. Jeder Befehl wird in `logs/commands.jsonl` protokolliert
 
 Synthetische Dateien erzeugen:
 ```bat
-python tools\generate_ptu.py --out data\Demo_T3_Fluoreszenz_4Kanal_5min.ptu --duration 300 --rates 5000,7500,10000,3500
-python tools\generate_ptu.py --hbt --out data\Demo_T2_Einzelphotonen_HBT_90s.ptu --duration 90
-python tools\generate_ptu.py --heralded --seed 7 --out data\Demo_T2_Heralded_K0_HBT_60s.ptu --duration 60
+python tools\generate_ptu.py --out data\Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu --duration 300 --rates 5000,7500,10000,3500
+python tools\generate_ptu.py --hbt --out data\Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu --duration 90
+python tools\generate_ptu.py --heralded --seed 7 --out data\Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu --duration 60
 python tools\generate_ptu.py --out data\mein_test.ptu --duration 60 --rates 50000,80000,120000,30000 --taus 0.5,1.5,3,6
 python tools\generate_ptu.py --t2 --sync 1e6 --duration 2 --out data\t2_mit_sync.ptu
 ```
-**`Demo_T3_Fluoreszenz_4Kanal_5min.ptu`** (39,6 MB, 5 min Echtzeit, Generic T3): Sync 40 MHz (Periode 25 ns),
+**`Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu`** (39,6 MB, 5 min Echtzeit, Generic T3): Sync 40 MHz (Periode 25 ns),
 Auflösung 4 ps, 4 Kanäle mit Lebensdauern 0,6 / 1,8 / 3,2 / 4,5 ns, Gauß-IRF (σ = 50 ps) bei 3 ns, 3 % Untergrund,
 zeitlich variierende Intensitäten (K1 Blinken, K2 Sinus 0,2 Hz, K3 Rampe, K4 konstant); mittlere Raten
 ca. 2,9 / 4,5 / 7,5 / 3,5 kcps (bewusst moderat, damit die Datei trotz 5 min klein bleibt).
 
-**`Demo_T2_Einzelphotonen_HBT_90s.ptu`** (17,8 MB, 90 s, Generic T2, 1 ps): abstrahierte Einzelphotonenquelle,
+**`Demo_Synthetisch_T2_Einzelphotonen_HBT_90s.ptu`** (17,8 MB, 90 s, Generic T2, 1 ps): abstrahierte Einzelphotonenquelle,
 gepulst angeregt mit 10 MHz (Periode 100 ns; Sync nicht aufgezeichnet, Rate im Header), Hanbury-Brown-Twiss-Aufbau
 mit 50:50-Strahlteiler auf K1 und K2 (je ≈ 16 kcps), Lebensdauer 1,5 ns, Jitter 60 ps, K2 um 1,2 ns verzögert.
 Höchstens ein Photon pro Puls plus kleiner Mehrphotonen-Anteil, Blinken der Quelle (an ≈ 1,5 µs, aus ≈ 1,0 µs),
@@ -279,7 +279,7 @@ Höchstens ein Photon pro Puls plus kleiner Mehrphotonen-Anteil, Blinken der Que
 Einzelphotonen-Charakter) und **Bunching-Schultern** (Peaks bei ±100 ns ≈ 1,2× höher als bei ±500 ns) durch das
 Blinken. Gegenprobe mit `ptufile`: identische Zeiten und Kanäle.
 
-**`Demo_T2_Heralded_K0_HBT_60s.ptu`** (28,2 MB, 60 s, Generic T2, 1 ps): Herald-Einzelphotonen aus einer
+**`Demo_Synthetisch_T2_Heralded_K0_HBT_60s.ptu`** (28,2 MB, 60 s, Generic T2, 1 ps): Herald-Einzelphotonen aus einer
 SPDC-artigen Paarquelle mit Dauerstrich-Pumpe (kein Puls-Takt). **K0** = Herald-Detektor (Idler) am Sync-Eingang
 (≈ 70 kcps), **K1/K2** = Signalarm hinter 50:50-Strahlteiler (je ≈ 10 kcps, davon 1 kcps Dunkelzählungen).
 Koinzidenzen K0–K1 bei +12 ns und K0–K2 bei +15 ns, Detektor-Jitter 25 ps je Detektor (Peak-FWHM ≈ 85 ps),
@@ -336,7 +336,7 @@ Zum Vergleich: ein TTTR-Rohdatenstrom mit 1 Mcps wären 4 MB/s.
 
 ```bat
 python -m pytest -q                                   REM Unit-/Integrationstests
-python tools\crosscheck.py data\Demo_T3_Fluoreszenz_4Kanal_5min.ptu REM Gegenprobe mit ptufile/phconvert
+python tools\crosscheck.py data\Demo_Synthetisch_T3_Fluoreszenz_4Kanal_5min.ptu REM Gegenprobe mit ptufile/phconvert
 python tools\ws_client_check.py ws://127.0.0.1:8765/ws REM End-to-End gegen laufenden Server
 python tools\screenshot.py http://127.0.0.1:8765/     REM Screenshots (pip install playwright; playwright install chromium)
 ```

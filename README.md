@@ -3,15 +3,29 @@
 [![Tests](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml/badge.svg)](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-blue.svg)](LICENSE)
 
-Live-Histogramme, Korrelationen und Zählraten einer PicoQuant **HydraHarp 500** auf dem Smartphone – mit
-Steuerung im Browser (PWA).
+Live-Histogramme, Korrelationen und Zählraten für eine PicoQuant **HydraHarp 500** auf dem Smartphone – mit
+Steuerung im Browser (PWA); derzeit **Simulation aus PTU-Dateien, noch ohne Geräteanbindung**.
+
+> [!IMPORTANT]
+> **Hinweis – bitte zuerst lesen**
+> - **Noch keine Anbindung an eine echte HydraHarp.** Version 1.0 spielt ausschließlich **PTU-Dateien als
+>   Simulation** ab. Die snAPI-Quelle (PTU-Wiedergabe über snAPI) ist unter Windows **ungetestet**, die
+>   Live-Quelle für das echte HydraHarp-500-Gerät ist nur ein **Platzhalter**.
+> - **Erstellt ausschließlich aus öffentlich verfügbaren Informationen:** öffentliche Handbücher und Downloads
+>   von PicoQuant, das öffentliche GitHub-Repository [PicoQuant/snAPI](https://github.com/PicoQuant/snAPI) und die
+>   [PTU-Format-Demos](https://github.com/PicoQuant/PicoQuant-Time-Tagged-File-Format-Demos). Dieses Repository
+>   enthält **keine Dateien von PicoQuant** (keine DLLs, Header, Demo-Code oder snAPI-Wheels); die Demodaten sind
+>   synthetisch erzeugt.
+> - **Kein Produkt der PicoQuant GmbH**, nicht mit ihr verbunden und nicht von ihr unterstützt oder geprüft.
+>   HydraHarp, PicoQuant, snAPI und SymPhoTime sind Marken ihrer jeweiligen Inhaber.
+> - **Ohne Gewährleistung** (MIT-Lizenz); nicht für sicherheitskritische Anwendungen bestimmt.
 
 **Download:** [aktuelle Version (Programm, Demodaten, Anleitung als PDF)](https://github.com/ExplorationSE/exse-harp-mobile/releases/latest)
 · Änderungen: [`CHANGELOG.md`](CHANGELOG.md) · Lizenz: [MIT](#13-lizenz)
 
 <p>
-  <img src="docs/screenshot-v100-header.png" alt="Kopfzeile mit Ansichtsumschalter und Kanaltasten" width="360">
-  <img src="docs/screenshot-v100-info.png" alt="Infobereich mit Versionsanzeige" width="360">
+  <img src="docs/screenshot-v102-header.png" alt="Kopfzeile mit Ansichtsumschalter und Kanaltasten" width="360">
+  <img src="docs/screenshot-v102-info.png" alt="Infobereich mit Version, Kennzeichen Simulation und Hinweis" width="360">
 </p>
 
 ## Funktionen
@@ -22,7 +36,7 @@ Steuerung im Browser (PWA).
 - **Steuerung vom Handy:** Start/Stopp/Reset, Binbreite, Länge, Tempo, Akkumulieren oder gleitendes Fenster;
   ein Client steuert, weitere sehen live mit.
 - **Windows-Betrieb** mit Skripten; Zugriff im LAN oder über das Internet (Cloudflare Quick Tunnel, Zugangscode, QR-Code).
-- **Simulation** durch Wiedergabe von `.ptu`-Dateien in Echtzeit; drei Demodateien im Release.
+- **Simulation** (noch ohne Geräteanbindung) durch Wiedergabe von `.ptu`-Dateien in Echtzeit; drei Demodateien im Release.
 - Server: Python/FastAPI/WebSocket, Oberfläche: uPlot, getestet mit pytest.
 
 Version: einzige Quelle `harp/__init__.py` (`__version__`), abrufbar über `/api/health`.

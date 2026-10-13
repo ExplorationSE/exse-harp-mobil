@@ -1,5 +1,15 @@
 # Änderungsprotokoll – ExSE Harp Mobile
 
+## 1.0.2 – 13.10.2026
+
+Hinweise zu Status und Herkunft, keine Funktionsänderung.
+- README: Hinweiskasten oben – noch keine Anbindung an eine echte HydraHarp (nur Simulation aus PTU-Dateien,
+  snAPI-Quelle unter Windows ungetestet, Gerätequelle Platzhalter); erstellt ausschließlich aus öffentlich
+  verfügbaren Informationen, keine PicoQuant-Dateien enthalten; kein Produkt der PicoQuant GmbH, Marken,
+  keine Gewährleistung, nicht für sicherheitskritische Anwendungen.
+- App: kurzer Hinweis und Kennzeichen „Simulation“ im Infobereich; Manifest-Beschreibung angepasst.
+- Repository-Beschreibung: „Simulation, noch ohne Geräteanbindung“.
+
 ## 1.0.1 – 13.10.2026
 
 Nur Dokumentation und Projektpflege, keine Funktionsänderung.

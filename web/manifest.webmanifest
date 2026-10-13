@@ -1,7 +1,7 @@
 {
   "name": "ExSE Harp Mobile",
   "short_name": "Harp Mobile",
-  "description": "Live-Histogramme einer (simulierten) PicoQuant HydraHarp 500",
+  "description": "Live-Histogramme einer simulierten HydraHarp 500 aus PTU-Dateien – noch ohne Geräteanbindung",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",

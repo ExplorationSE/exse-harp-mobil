@@ -25,10 +25,10 @@ with sync_playwright() as p:
         if w == 390:
             pg.locator(".topbar").screenshot(path=str(OUT / "screenshot-v100-kopf.png"))
             hb = pg.locator(".hist-card .card-head").bounding_box(); tb = pg.locator(".topbar").bounding_box()
-            pg.screenshot(path=str(OUT / "screenshot-v100-header.png"),
+            pg.screenshot(path=str(OUT / "screenshot-v102-header.png"),
                           clip={"x": 0, "y": 0, "width": w, "height": hb["y"] + hb["height"] + 8})
             pg.locator("section.info").scroll_into_view_if_needed()
-            pg.locator("section.info").screenshot(path=str(OUT / "screenshot-v100-info.png"))
+            pg.locator("section.info").screenshot(path=str(OUT / "screenshot-v102-info.png"))
         ctx.close()
     b.close()
     print("JS-Fehler:", errors or "keine")

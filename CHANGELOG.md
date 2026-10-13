@@ -1,5 +1,12 @@
 # Änderungsprotokoll – ExSE Harp Mobil
 
+## Unveröffentlicht
+
+- `install_windows.bat`: Python-Suche robuster (py -3.13, -3.12, -3.11, -3, python; jeder Kandidat wird
+  ausgeführt und geprüft, mind. 3.10, 64 Bit). Behebt Fehlstart mit dem neuen Python-Installationsmanager
+  („No runtime installed that matches 3.13“). Klare Meldung mit Hinweis `py install 3.13`; Abbruch vor
+  venv/pip, wenn kein Python gefunden wird oder die venv nicht angelegt werden kann.
+
 ## 1.0.4 – 13.10.2026
 
 Textänderung, keine Funktionsänderung.

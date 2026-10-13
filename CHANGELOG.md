@@ -1,6 +1,6 @@
 # Änderungsprotokoll – ExSE Harp Mobil
 
-## Unveröffentlicht
+## 1.0.5 – 13.10.2026
 
 - `install_windows.bat`: Python-Suche robuster (py -3.13, -3.12, -3.11, -3, py, python; jeder Kandidat wird
   ausgeführt und geprüft, mind. 3.10, 64 Bit). Behebt Fehlstart mit dem neuen Python-Installationsmanager

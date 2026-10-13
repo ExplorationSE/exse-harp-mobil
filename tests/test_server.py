@@ -114,7 +114,7 @@ def test_version_single_source(tmp_path):
     from harp.server import create_app as _ca
     from harp.config import Config as _C
     from fastapi.testclient import TestClient as _TC
-    assert harp.__version__ == "1.0.4"
+    assert harp.__version__ == "1.0.5"
     with _TC(_ca(_C(data_dir=tmp_path, log_dir=tmp_path / "logs"))) as c:
         r = c.get("/api/health").json()
     assert r == {"ok": True, "name": "ExSE Harp Mobil", "version": harp.__version__}

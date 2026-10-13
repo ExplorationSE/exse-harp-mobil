@@ -1,4 +1,14 @@
-# Änderungsprotokoll – ExSE Harp Mobile
+# Änderungsprotokoll – ExSE Harp Mobil
+
+## 1.0.3 – 13.10.2026
+
+Umbenennung, keine Funktionsänderung.
+- Neuer Name **ExSE Harp Mobil** (vorher „ExSE Harp Mobile“): Seitentitel, App-Name (Kurzname „Harp Mobil“),
+  Infobereich, Anmeldeseite, `/api/health`, Skripte, README, Anleitung und PDF.
+- GitHub-Repository umbenannt in `ExplorationSE/exse-harp-mobil` (alte Adresse leitet weiter);
+  Download-Dateien heißen jetzt `exse-harp-mobil-…zip`.
+- Service-Worker-Cache neu (`exse-harp-mobil-1.0.3-…`); ggf. die alte installierte App vom Startbildschirm entfernen
+  und neu hinzufügen, damit der neue Name erscheint.
 
 ## 1.0.2 – 13.10.2026
 

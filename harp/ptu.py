@@ -391,7 +391,7 @@ def standard_tags(*, record_type: int, num_records: int, global_res_s: float, re
     t: list[tuple[str, int, Any, int]] = [
         ("File_GUID", -1, "{" + str(uuid.uuid4()).upper() + "}", TY_ANSISTRING),
         ("File_CreatingTime", -1, _tdatetime(now), TY_TDATETIME),
-        ("File_Comment", -1, comment or "Synthetische Testdaten (ExSE Harp Mobile)", TY_ANSISTRING),
+        ("File_Comment", -1, comment or "Synthetische Testdaten (ExSE Harp Mobil)", TY_ANSISTRING),
         ("CreatorSW_Name", -1, "HarpMobile-PTU-Generator", TY_ANSISTRING),
         ("CreatorSW_Version", -1, "1.0", TY_ANSISTRING),
         ("Measurement_Mode", -1, mode, TY_INT8),

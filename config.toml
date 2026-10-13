@@ -1,4 +1,4 @@
-# Harp Mobile V1 – Konfiguration
+# Harp Mobil – Konfiguration
 
 [server]
 # 0.0.0.0 = im ganzen LAN erreichbar (für das Handy nötig); 127.0.0.1 = nur dieser PC

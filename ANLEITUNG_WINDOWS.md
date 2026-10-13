@@ -1,4 +1,4 @@
-# ExSE Harp Mobile – Anleitung: Betrieb unter Windows mit Zugriff vom Handy über das Internet
+# ExSE Harp Mobil – Anleitung: Betrieb unter Windows mit Zugriff vom Handy über das Internet
 
 Diese Anleitung führt Sie Schritt für Schritt durch Installation, Start und Bedienung der Version 1
 (Simulation aus einer PTU-Datei) auf Ihrem eigenen Windows-PC. Das Handy greift über das Internet
@@ -20,7 +20,7 @@ Handy (Browser, mobile Daten)
 Cloudflare (Internet)
    │  ausgehende Verbindung, von Ihrem PC aufgebaut (cloudflared.exe)
    ▼
-Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.1:8765  (nur lokal)
+Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobil-Server  http://127.0.0.1:8765  (nur lokal)
                                          └─ spielt die Demo-PTU-Datei ab und histogrammiert
 ```
 
@@ -87,7 +87,7 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
 3. Nach 10–30 Sekunden erscheint ein Kasten etwa so:
    ```
    ==================================================================
-     ExSE Harp Mobile ist ONLINE (Cloudflare Quick Tunnel)
+     ExSE Harp Mobil ist ONLINE (Cloudflare Quick Tunnel)
    ==================================================================
      Adresse:      https://beispiel-woerter.trycloudflare.com
      Zugangscode:  K7QM4-XPR9H
@@ -107,7 +107,7 @@ Ihr Windows-PC:  cloudflared.exe  ──►  Harp-Mobile-Server  http://127.0.0.
 1. Schalten Sie am Handy WLAN ruhig aus – es soll ja über **mobile Daten** funktionieren.
 2. Entweder den **QR-Code** mit der Kamera-App scannen (öffnet den Direkt-Link inklusive Code), **oder** die
    Adresse `https://….trycloudflare.com` von Hand in den Browser tippen.
-3. Ohne Code erscheint die Seite **„Harp Mobile“** mit einem Eingabefeld. Code eingeben → **„Anmelden“**.
+3. Ohne Code erscheint die Seite **„Harp Mobil“** mit einem Eingabefeld. Code eingeben → **„Anmelden“**.
    Groß-/Kleinschreibung, Leerzeichen und der Bindestrich spielen keine Rolle (`k7qm4 xpr9h` geht auch).
    Zur Sicherheit wird nach mehreren falschen Eingaben kurz gesperrt.
 4. Danach bleibt das Handy angemeldet (Cookie, max. 7 Tage bzw. bis `start_online.bat` neu gestartet wird).

@@ -1,5 +1,5 @@
 @echo off
-rem ExSE Harp Mobile - einmalige Installation (Windows 10/11, 64 Bit)
+rem ExSE Harp Mobil - einmalige Installation (Windows 10/11, 64 Bit)
 setlocal
 cd /d "%~dp0"
 set "PYEXE="

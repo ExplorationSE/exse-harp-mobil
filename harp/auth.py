@@ -115,7 +115,7 @@ def login_page(error: str = "", next_url: str = "/") -> str:
     err = f'<p class="err">{html.escape(error)}</p>' if error else ""
     return f"""<!doctype html><html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
-<title>ExSE Harp Mobile – Anmeldung</title><style>
+<title>ExSE Harp Mobil – Anmeldung</title><style>
 body{{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#e2e8f0;
 font:16px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}}
 form{{background:#111c33;border:1px solid #22304f;border-radius:16px;padding:24px;width:min(340px,90vw)}}
@@ -124,7 +124,7 @@ input{{width:100%;box-sizing:border-box;font-size:22px;letter-spacing:3px;text-t
 border-radius:10px;border:1px solid #22304f;background:#0b1222;color:#e2e8f0;text-align:center}}
 button{{width:100%;margin-top:14px;padding:13px;font-size:17px;border:0;border-radius:10px;background:#0e7490;color:#fff}}
 .err{{color:#fecaca;margin-top:12px}}</style></head><body>
-<form method="post" action="/login"><h1>ExSE Harp Mobile</h1><p>Bitte Zugangscode eingeben.</p>
+<form method="post" action="/login"><h1>ExSE Harp Mobil</h1><p>Bitte Zugangscode eingeben.</p>
 <input name="code" autocomplete="one-time-code" autocapitalize="characters" autocorrect="off" spellcheck="false" autofocus required>
 <input type="hidden" name="next" value="{html.escape(next_url)}">
 <button type="submit">Anmelden</button>{err}</form></body></html>"""

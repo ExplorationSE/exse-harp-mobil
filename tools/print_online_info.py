@@ -17,7 +17,7 @@ def main() -> None:
     link = f"{url}/?token={code}"
     line = "=" * 66
     print("\n" + line)
-    print(f"  ExSE Harp Mobile {__version__} ist ONLINE (Cloudflare Quick Tunnel)")
+    print(f"  ExSE Harp Mobil {__version__} ist ONLINE (Cloudflare Quick Tunnel)")
     print(line)
     print(f"  Adresse (am Handy öffnen):  {url}")
     print(f"  Zugangscode:                {pretty}")

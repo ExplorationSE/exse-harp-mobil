@@ -1,6 +1,6 @@
-# ExSE Harp Mobile
+# ExSE Harp Mobil
 
-[![Tests](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml/badge.svg)](https://github.com/ExplorationSE/exse-harp-mobile/actions/workflows/tests.yml)
+[![Tests](https://github.com/ExplorationSE/exse-harp-mobil/actions/workflows/tests.yml/badge.svg)](https://github.com/ExplorationSE/exse-harp-mobil/actions/workflows/tests.yml)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-blue.svg)](LICENSE)
 
 Live-Histogramme, Korrelationen und Zählraten für eine PicoQuant **HydraHarp 500** auf dem Smartphone – mit
@@ -20,12 +20,12 @@ Steuerung im Browser (PWA); derzeit **Simulation aus PTU-Dateien, noch ohne Ger�
 >   HydraHarp, PicoQuant, snAPI und SymPhoTime sind Marken ihrer jeweiligen Inhaber.
 > - **Ohne Gewährleistung** (MIT-Lizenz); nicht für sicherheitskritische Anwendungen bestimmt.
 
-**Download:** [aktuelle Version (Programm, Demodaten, Anleitung als PDF)](https://github.com/ExplorationSE/exse-harp-mobile/releases/latest)
+**Download:** [aktuelle Version (Programm, Demodaten, Anleitung als PDF)](https://github.com/ExplorationSE/exse-harp-mobil/releases/latest)
 · Änderungen: [`CHANGELOG.md`](CHANGELOG.md) · Lizenz: [MIT](#13-lizenz)
 
 <p>
-  <img src="docs/screenshot-v102-header.png" alt="Kopfzeile mit Ansichtsumschalter und Kanaltasten" width="360">
-  <img src="docs/screenshot-v102-info.png" alt="Infobereich mit Version, Kennzeichen Simulation und Hinweis" width="360">
+  <img src="docs/screenshot-v103-header.png" alt="Kopfzeile mit Ansichtsumschalter und Kanaltasten" width="360">
+  <img src="docs/screenshot-v103-info.png" alt="Infobereich mit Version, Kennzeichen Simulation und Hinweis" width="360">
 </p>
 
 ## Funktionen
@@ -163,7 +163,7 @@ Beim Start wird `default_file` geöffnet und (bei `autostart = true`) sofort abg
 2. IP-Adresse des Messrechners ermitteln: `ipconfig` → „IPv4-Adresse“, z. B. `192.168.1.50`.
 3. Windows-Firewall für den Port öffnen (Eingabeaufforderung **als Administrator**, nur Profil „Privat“):
    ```bat
-   netsh advfirewall firewall add rule name="Harp Mobile" dir=in action=allow protocol=TCP localport=8765 profile=private
+   netsh advfirewall firewall add rule name="Harp Mobil" dir=in action=allow protocol=TCP localport=8765 profile=private
    ```
 4. Am Handy im Browser öffnen: `http://192.168.1.50:8765/` (mit Token: `http://192.168.1.50:8765/?token=IHR_TOKEN`).
 5. Optional „Zum Startbildschirm hinzufügen“. Hinweis: Der Service Worker (Offline-App-Hülle) wird von
@@ -291,7 +291,7 @@ Statt 90 s nur 60 s, damit das Datenpaket unter 25 MB bleibt (gepackt ≈ 21 MB;
 Korrelation 64 ps, ±65 ns.
 Gegenprobe mit `ptufile` 2026.8.8: Zeiten identisch; `ptufile` meldet Sync-Records in T2 allerdings als
 Kanal 0, also genauso wie Eingang 1 (dessen Kanal 0-basiert ist). K0 und K1 sind dort nur über die Record-Bits
-unterscheidbar. Der Harp-Mobile-Leser folgt dem PicoQuant-Formatbeispiel: Spezial-Record mit Kanal 0 = Sync → K0.
+unterscheidbar. Der Harp-Mobil-Leser folgt dem PicoQuant-Formatbeispiel: Spezial-Record mit Kanal 0 = Sync → K0.
 
 **Sync als Datenkanal K0 (T2):** Bei T2 ist der Sync-Eingang des HydraHarp ein normaler Zeitkanal; die
 Sync-Ereignisse stehen mit Zeitstempel in der Datei (Spezial-Record, Kanal 0). Enthält eine T2-Datei solche

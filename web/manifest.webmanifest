@@ -1,6 +1,6 @@
 {
-  "name": "ExSE Harp Mobile",
-  "short_name": "Harp Mobile",
+  "name": "ExSE Harp Mobil",
+  "short_name": "Harp Mobil",
   "description": "Live-Histogramme einer simulierten HydraHarp 500 aus PTU-Dateien – noch ohne Geräteanbindung",
   "start_url": "/",
   "display": "standalone",

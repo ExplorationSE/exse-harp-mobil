@@ -8,7 +8,7 @@ rem 1) Python suchen. Jeder Kandidat wird wirklich ausgefuehrt und muss die Mark
 rem    ausgeben (Version >= 3.10, 64 Bit). Nur den Fehlercode zu pruefen reicht nicht: der neue
 rem    Python-Installationsmanager ("py") liefert bei fehlender Version teils negative Fehlercodes,
 rem    die "if errorlevel 1" nicht erkennt.
-for %%C in ("py -3.13" "py -3.12" "py -3.11" "py -3" "python") do (
+for %%C in ("py -3.13" "py -3.12" "py -3.11" "py -3" "py" "python") do (
   if not defined PYEXE call :probe %%~C
 )
 if not defined PYEXE goto no_python
@@ -46,7 +46,7 @@ exit /b 0
 
 :no_python
 echo FEHLER: Kein passendes Python gefunden (benoetigt 3.10 oder neuer, 64 Bit).
-echo Geprueft wurden: py -3.13, py -3.12, py -3.11, py -3, python
+echo Geprueft wurden: py -3.13, py -3.12, py -3.11, py -3, py, python
 echo Abhilfe (eine der beiden Moeglichkeiten):
 echo   - Mit dem Python-Installationsmanager in einer Eingabeaufforderung:  py install 3.13
 echo   - Oder Python 3.13 (64 Bit) von https://www.python.org/downloads/ installieren

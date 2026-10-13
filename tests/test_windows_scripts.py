@@ -10,8 +10,9 @@ def test_crlf():
 
 
 def test_python_kandidaten_in_reihenfolge():
-    order = ['"py -3.13"', '"py -3.12"', '"py -3.11"', '"py -3"', '"python"']
-    pos = [TXT.index(c) for c in order]
+    order = ['"py -3.13"', '"py -3.12"', '"py -3.11"', '"py -3"', '"py"', '"python"']
+    line = next(l for l in TXT.splitlines() if l.startswith("for %%C in"))
+    pos = [line.index(c) for c in order]
     assert pos == sorted(pos)
 
 

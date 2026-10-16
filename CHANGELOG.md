@@ -1,5 +1,13 @@
 # Änderungsprotokoll – ExSE Harp Mobil
 
+## 1.0.7 – 17.10.2026
+
+- App: Im T2-Modus gibt es keine Kachel „Sync“ mehr (bisher stand bei T2-Dateien ohne K0-Ereignisse eine
+  Kachel „Sync 0“). Der Sync-Eingang ist bei T2 ein normaler Datenkanal und erscheint als eigene Kachel „K0“
+  nur, wenn die Datei K0-Ereignisse enthält.
+- App: Infobereich bei T2 ohne Sync-Rate („T2, 4 Kanäle“ bzw. „T2, 4 Kanäle + K0“). T3 unverändert
+  (Kachel „Sync“, „Sync … cps“ im Infobereich).
+
 ## 1.0.6 – 13.10.2026
 
 Stabiler Betrieb mit mehreren Handys gleichzeitig.

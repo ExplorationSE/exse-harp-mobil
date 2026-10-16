@@ -360,8 +360,10 @@ function traceReadout(u) {
   r.innerHTML = parts.join(" · ");
 }
 function drawRates(m) {
-  // T2 mit K0: Sync-Eingang ist Datenkanal K0 (gemessene Rate), sonst Kachel „Sync“
-  const f = m.first_channel ?? 1, tiles = f === 0 ? [] : [["Sync", m.sync_rate, "#cbd5e1", null]];
+  // T2: Sync-Eingang ist Datenkanal K0 (eigene Kachel, nur wenn die Datei K0-Ereignisse enthält);
+  // T3: Kachel „Sync“ mit der Sync-Rate
+  const f = m.first_channel ?? 1, t2 = ((S.status || {}).info || {}).mode === "T2";
+  const tiles = t2 || f === 0 ? [] : [["Sync", m.sync_rate, "#cbd5e1", null]];
   m.rates.forEach((r, i) => tiles.push(["K" + (f + i), r, chColor(f + i), f + i]));
   const box = $("rates"); box.style.setProperty("--n", Math.min(tiles.length, 5));
   box.innerHTML = tiles.map(([k, r, c, ch]) =>
@@ -371,7 +373,9 @@ function drawRates(m) {
 function renderInfo() {
   const st = S.status || {}, info = st.info || {}, m = S.lastFrame;
   const rows = [["Quelle", st.source + (info.record_type ? " · " + info.record_type : "")], ["Datei", st.file || "–"],
-    ["Modus", (info.mode || "–") + ", " + (info.num_channels || "?") + " Kanäle, Sync " + fmtRate(info.sync_rate_hz || 0).join(" ")],
+    ["Modus", (info.mode || "–") + ", " + (info.num_channels || "?") + " Kanäle"
+      + (info.mode === "T2" ? ((info.first_channel ?? 1) === 0 ? " + K0" : "")
+        : ", Sync " + fmtRate(info.sync_rate_hz || 0).join(" "))],
     ["Auflösung", (info.resolution_ps || "–") + " ps · Dauer " + (info.duration_s || 0).toFixed(2) + " s"]];
   if (m) rows.push(["Frame", `#${m.seq} · t = ${m.t_file_s.toFixed(2)} s · ${S.fps.toFixed(1)} fps`],
     ["Anzeige", `${m.n_bins} von ${m.n_bins_full} Bins (×${m.rebin_factor}) à ${(m.bin_width_ps / 1000).toFixed(3)} ns`],
